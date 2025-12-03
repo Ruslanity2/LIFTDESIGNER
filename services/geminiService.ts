@@ -1,19 +1,26 @@
 import { GoogleGenAI } from "@google/genai";
 import { ElevatorConfig } from "../types";
 
-// Helper to get API key from various environment variable formats (Vite, CRA, Standard)
+// Helper to get API key safely ensuring no "process is not defined" crashes
 const getApiKey = () => {
-  // @ts-ignore - Support for Vite
+  // 1. Try Vite format (import.meta.env)
+  // @ts-ignore
   if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
     // @ts-ignore
     return import.meta.env.VITE_API_KEY;
   }
-  // Support for Create React App (CRA)
-  if (process.env.REACT_APP_API_KEY) {
-    return process.env.REACT_APP_API_KEY;
+  
+  // 2. Try Standard Node/CRA format (process.env) - Safe check
+  if (typeof process !== 'undefined' && process.env) {
+    if (process.env.REACT_APP_API_KEY) {
+      return process.env.REACT_APP_API_KEY;
+    }
+    if (process.env.API_KEY) {
+      return process.env.API_KEY;
+    }
   }
-  // Standard Node/System env
-  return process.env.API_KEY;
+  
+  return "";
 };
 
 const apiKey = getApiKey();
@@ -22,12 +29,18 @@ if (!apiKey) {
   console.warn("API Key is missing. AI features will not work. Please check your .env file.");
 }
 
-const ai = new GoogleGenAI({ apiKey: apiKey || 'dummy-key-to-prevent-crash' });
+// Initialize with valid key or empty string (to allow app to load, will fail only on generation)
+const ai = new GoogleGenAI({ apiKey: apiKey || 'missing-key' });
 
 export const generateElevatorRender = async (config: ElevatorConfig): Promise<string> => {
-  if (!apiKey) {
+  const currentKey = getApiKey();
+  
+  if (!currentKey) {
      throw new Error("API Key is missing. Please add VITE_API_KEY or REACT_APP_API_KEY to your .env file.");
   }
+  
+  // Re-initialize to ensure we have the latest key if it was set late
+  const activeAi = new GoogleGenAI({ apiKey: currentKey });
 
   const prompt = `
     Photorealistic architectural visualization of a modern passenger elevator interior. 
@@ -46,7 +59,7 @@ export const generateElevatorRender = async (config: ElevatorConfig): Promise<st
   `;
 
   try {
-    const response = await ai.models.generateContent({
+    const response = await activeAi.models.generateContent({
       model: 'gemini-3-pro-image-preview',
       contents: {
         parts: [{ text: prompt }],
