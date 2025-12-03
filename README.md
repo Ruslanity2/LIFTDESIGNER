@@ -1,11 +1,36 @@
-<div align="center">
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+# Elevator Design Studio
 
-  <h1>Built with AI Studio</h2>
+A React-based desktop application for configuring and visualizing passenger elevator interiors.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Features
+- Real-time 3D CSS rendering
+- Google Gemini AI integration for photorealistic previews
+- Customizable walls, floors, ceilings, and accessories
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## Getting Started
 
-</div>
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Set up API Key**
+   Ensure your environment variables are configured with `API_KEY` for Google Gemini.
+
+3. **Run locally**
+   ```bash
+   npm start
+   ```
+
+## Deploying to GitHub
+
+1. Initialize Git: `git init`
+2. Add files: `git add .`
+3. Commit: `git commit -m "Initial commit"`
+4. Add remote: `git remote add origin <your-repo-url>`
+5. Push: `git push -u origin main`
+
+## Hosting
+
+This app can be deployed to Vercel, Netlify, or GitHub Pages.
