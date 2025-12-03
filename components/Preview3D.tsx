@@ -85,16 +85,22 @@ export const Preview3D: React.FC<Preview3DProps> = ({ config }) => {
         .ceiling {
           width: 500px;
           height: 500px;
-          transform: rotateX(-90deg) translateZ(-250px); /* Move UP relative to center */
-          top: -250px; /* Adjust positioning */
+          /* Center vertically in 600px height: (600-500)/2 = 50px */
+          top: 50px;
+          /* Rotate to face down (-90deg X) and push UP (-Y direction in rotated frame) by half wall height (-300px local Z) */
+          /* Was 90deg (bottom) -> Changed to -90deg (top) */
+          transform: rotateX(-90deg) translateZ(-300px);
           background: #e5e7eb;
           box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
         }
         .floor {
           width: 500px;
           height: 500px;
-          transform: rotateX(90deg) translateZ(-350px); /* Move DOWN */
-          top: 350px;
+          /* Center vertically in 600px height */
+          top: 50px;
+          /* Rotate to face up (90deg X) and push DOWN (+Y direction in rotated frame) by half wall height (-300px local Z) */
+          /* Was -90deg (top) -> Changed to 90deg (bottom) */
+          transform: rotateX(90deg) translateZ(-300px);
         }
 
         /* Reflections and Details */
