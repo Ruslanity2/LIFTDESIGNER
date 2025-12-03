@@ -13,10 +13,21 @@ A React-based desktop application for configuring and visualizing passenger elev
 1. **Install dependencies**
    ```bash
    npm install
+   # Note: You can ignore "npm warn deprecated node-domexception" warnings.
    ```
 
 2. **Set up API Key**
-   Ensure your environment variables are configured with `API_KEY` for Google Gemini.
+   Create a `.env` file in the root directory.
+   
+   If using **Create React App**:
+   ```env
+   REACT_APP_API_KEY=AIzaSy...
+   ```
+   
+   If using **Vite**:
+   ```env
+   VITE_API_KEY=AIzaSy...
+   ```
 
 3. **Run locally**
    ```bash
@@ -34,3 +45,4 @@ A React-based desktop application for configuring and visualizing passenger elev
 ## Hosting
 
 This app can be deployed to Vercel, Netlify, or GitHub Pages.
+Ensure you add your API Key in the hosting provider's "Environment Variables" settings.

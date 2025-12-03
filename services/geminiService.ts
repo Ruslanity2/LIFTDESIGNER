@@ -1,9 +1,34 @@
 import { GoogleGenAI } from "@google/genai";
 import { ElevatorConfig } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Helper to get API key from various environment variable formats (Vite, CRA, Standard)
+const getApiKey = () => {
+  // @ts-ignore - Support for Vite
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
+    // @ts-ignore
+    return import.meta.env.VITE_API_KEY;
+  }
+  // Support for Create React App (CRA)
+  if (process.env.REACT_APP_API_KEY) {
+    return process.env.REACT_APP_API_KEY;
+  }
+  // Standard Node/System env
+  return process.env.API_KEY;
+};
+
+const apiKey = getApiKey();
+
+if (!apiKey) {
+  console.warn("API Key is missing. AI features will not work. Please check your .env file.");
+}
+
+const ai = new GoogleGenAI({ apiKey: apiKey || 'dummy-key-to-prevent-crash' });
 
 export const generateElevatorRender = async (config: ElevatorConfig): Promise<string> => {
+  if (!apiKey) {
+     throw new Error("API Key is missing. Please add VITE_API_KEY or REACT_APP_API_KEY to your .env file.");
+  }
+
   const prompt = `
     Photorealistic architectural visualization of a modern passenger elevator interior. 
     Perspective: Inside the cabin looking towards the back wall.
